@@ -11,6 +11,8 @@ typedef enum
     PAUSE,
     STAT,
 
+
+
 }protimer_state; 
 
 typedef enum 
