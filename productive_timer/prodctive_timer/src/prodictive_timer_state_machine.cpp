@@ -1,11 +1,13 @@
 #include "main.h"
-
+#include "lcd.h"
 void protimer_init(protimer_t *mobj )
 {
+    event_t ee; 
     mobj->active_state =IDLE; 
     mobj->prod_time = 0 ; 
+    protimer_state_machine(mobj , &ee );  
 }
-event_status_t protimer_state_machine(protimer_t *mobj , event_t *e)
+event_status_t  protimer_state_machine(protimer_t *mobj , event_t *e)
 {
     switch (mobj->active_state)
     {
@@ -206,23 +208,31 @@ switch (e->sig) // implement a case for all signal entry , exit ......
     return EVENT_IGNORED;
     
 }
+//////////////// helper fucntion //////////////
 
-
-void display_time (unsigned int )
+void display_time (unsigned int time  )
 {
-
+        char buf[7]; 
+        String time_msg; 
+        u8  m = time /60 ; 
+        u8  s = time % 60 ;
+        sprintf(buf , "%03d:%02d", m,s ); 
+        time_msg = (String)buf ; 
+        lcd_set_cursor(5 , 0); 
+        lcd_print_string(time_msg);  
 }
-void  display_msg (String s )
+void  display_msg (String s , u8 c , u8 r )
 {
-
+    lcd_set_cursor(c ,r ); 
+    lcd_print_string(s);
 }
 
 void do_beep () 
 {
-
+        tone(PIN_BUZZER , 4000 , 25);
 }
 
 void display_clear () 
 {
-
+   lcd_clear(); 
 }
